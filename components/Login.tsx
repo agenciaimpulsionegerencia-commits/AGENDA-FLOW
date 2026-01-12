@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { apiService } from '../services/apiService';
-import { Clinic } from '../types';
+import { apiService } from '../services/apiService.ts';
+import { Clinic } from '../types.ts';
 import { Mail, ArrowRight, Lock, Eye, EyeOff } from 'lucide-react';
 
 interface LoginProps {
@@ -34,7 +34,6 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-center">
         <h2 className="text-3xl font-bold font-serif mb-2">Bem-vindo(a)</h2>
         <p className="text-gray-500 mb-8">Acesse o painel da sua clínica</p>
-        
         <form onSubmit={handleLogin} className="space-y-4 text-left">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">E-mail de Login</label>
@@ -50,7 +49,6 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
             <div className="relative">
@@ -72,9 +70,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               </button>
             </div>
           </div>
-          
           {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
-          
           <button
             type="submit"
             disabled={loading}

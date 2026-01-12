@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { apiService } from '../services/apiService';
-import { Clinic } from '../types';
+import { apiService } from '../services/apiService.ts';
+import { Clinic } from '../types.ts';
 import { Plus, Trash2, Building, Mail, Phone, MapPin, Copy, ExternalLink, Check, User, Key, Eye, EyeOff, Image as ImageIcon, LayoutDashboard } from 'lucide-react';
 
 interface SuperAdminPanelProps {
@@ -55,7 +55,6 @@ export const SuperAdminPanel: React.FC<SuperAdminPanelProps> = ({ onManageClinic
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Helper for input styling to ensure text is visible (black)
   const inputStyle = "w-full p-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all";
 
   return (
@@ -172,18 +171,15 @@ export const SuperAdminPanel: React.FC<SuperAdminPanelProps> = ({ onManageClinic
                  <h3 className="absolute bottom-4 left-4 text-blue-900 font-bold text-xl">{clinic.name}</h3>
               </div>
             )}
-            
             <div className="p-6 flex-grow">
               <p className="text-xs text-blue-600 font-black mb-4 uppercase tracking-tighter flex items-center">
                 <User className="w-3 h-3 mr-1" /> {clinic.ownerName}
               </p>
-              
               <div className="space-y-3 text-sm text-gray-600">
                 <div className="flex items-center"><Mail className="w-4 h-4 mr-3 text-gray-400" /> {clinic.email}</div>
                 <div className="flex items-center"><Phone className="w-4 h-4 mr-3 text-gray-400" /> {clinic.phone}</div>
                 <div className="flex items-center"><MapPin className="w-4 h-4 mr-3 text-gray-400" /> <span className="truncate">{clinic.address}</span></div>
               </div>
-
               <div className="mt-6 pt-4 border-t border-gray-50 space-y-2">
                  <button 
                     onClick={() => onManageClinic(clinic)}

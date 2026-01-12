@@ -1,23 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
-import { BookingWizard } from './components/BookingWizard';
-import { AdminPanel } from './components/AdminPanel';
-import { SuperAdminPanel } from './components/SuperAdminPanel';
-import { Login } from './components/Login';
-import { Clinic } from './types';
+import { Navbar } from './components/Navbar.tsx';
+import { BookingWizard } from './components/BookingWizard.tsx';
+import { AdminPanel } from './components/AdminPanel.tsx';
+import { SuperAdminPanel } from './components/SuperAdminPanel.tsx';
+import { Login } from './components/Login.tsx';
+import { Clinic } from './types.ts';
 import { Sparkles, Calendar, Heart, ShieldCheck, ArrowRight, Lock, Eye, EyeOff } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'admin' | 'booking' | 'super-admin' | 'login' | 'super-admin-login'>('home');
   const [loggedClinic, setLoggedClinic] = useState<Clinic | null>(null);
-  const [managedClinic, setManagedClinic] = useState<Clinic | null>(null); // For Master Admin managing a clinic
+  const [managedClinic, setManagedClinic] = useState<Clinic | null>(null); 
   const [targetClinicId, setTargetClinicId] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
 
-  // Check for clinic ID in URL on load for private links
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const clinicId = params.get('clinic');
@@ -44,7 +43,6 @@ const App: React.FC = () => {
     setCurrentPage('admin');
   };
 
-  // Fix: handleManageClinic added to fulfill SuperAdminPanel requirements and provide management functionality
   const handleManageClinic = (clinic: Clinic) => {
     setManagedClinic(clinic);
     setCurrentPage('admin');
@@ -60,7 +58,6 @@ const App: React.FC = () => {
   };
 
   const handleSuperAdminLogin = () => {
-    // Updated master password to 1476
     if (passwordInput === '1476') {
       setIsSuperAdmin(true);
       localStorage.setItem('agendaflow_super', 'true');
@@ -100,7 +97,6 @@ const App: React.FC = () => {
                 </div>
               </div>
             </header>
-
             <section className="py-20 bg-gray-50 px-4">
               <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <div className="bg-white p-8 rounded-3xl border border-gray-100">
@@ -108,25 +104,24 @@ const App: React.FC = () => {
                     <Lock className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold mb-3 font-serif">Links Privados</h3>
-                  <p className="text-gray-500">Sua clínica tem um link único. Seus clientes não veem a concorrência.</p>
+                  <p className="text-gray-500">Cada clínica tem seu link exclusivo. Sem vitrine pública para a concorrência.</p>
                 </div>
                 <div className="bg-white p-8 rounded-3xl border border-gray-100">
                   <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Calendar className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold mb-3 font-serif">Agendamento Direto</h3>
-                  <p className="text-gray-500">Interface intuitiva para que seus clientes agendem em segundos.</p>
+                  <p className="text-gray-500">Interface limpa e rápida para seus clientes escolherem serviços e horários.</p>
                 </div>
                 <div className="bg-white p-8 rounded-3xl border border-gray-100">
                   <div className="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 font-serif">Controle Total</h3>
-                  <p className="text-gray-500">Gerencie horários, serviços e status de agendamentos em um só lugar.</p>
+                  <h3 className="text-xl font-bold mb-3 font-serif">Acesso Master</h3>
+                  <p className="text-gray-500">Gestão centralizada para suporte e criação de novas unidades parceiras.</p>
                 </div>
               </div>
             </section>
-
             <footer className="py-12 border-t border-gray-100 bg-white">
               <div className="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
                 <p>&copy; 2024 AGENDA FLOW. O ritmo perfeito da sua beleza.</p>
@@ -139,17 +134,8 @@ const App: React.FC = () => {
       case 'login':
         return <Login onLoginSuccess={handleLogin} />;
       case 'admin':
-        // Fix: Use managedClinic if available (for super admin view) or fallback to loggedClinic
         const clinicToShow = managedClinic || loggedClinic;
-        return clinicToShow ? (
-          <AdminPanel 
-            loggedClinic={clinicToShow} 
-            isMasterView={!!managedClinic} 
-            onExitMasterView={() => { setManagedClinic(null); setCurrentPage('super-admin'); }} 
-          />
-        ) : (
-          <Login onLoginSuccess={handleLogin} />
-        );
+        return clinicToShow ? <AdminPanel loggedClinic={clinicToShow} isMasterView={!!managedClinic} onExitMasterView={() => { setManagedClinic(null); setCurrentPage('super-admin'); }} /> : <Login onLoginSuccess={handleLogin} />;
       case 'super-admin-login':
         return (
           <div className="max-w-md mx-auto py-20 px-4">
@@ -159,8 +145,8 @@ const App: React.FC = () => {
               <div className="relative mb-6">
                 <input 
                   type={showPassword ? 'text' : 'password'} 
-                  placeholder="Digite a senha master" 
-                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-center text-gray-900 font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Senha Master" 
+                  className="w-full p-4 bg-gray-50 border border-gray-300 rounded-xl text-center text-gray-900 font-bold outline-none focus:ring-2 focus:ring-blue-500"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSuperAdminLogin()}
@@ -168,23 +154,21 @@ const App: React.FC = () => {
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
               <button 
                 onClick={handleSuperAdminLogin}
-                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+                className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
               >
-                Entrar
+                Autenticar
               </button>
-              <p className="text-xs text-gray-400 mt-4 italic">Apenas pessoal autorizado.</p>
             </div>
           </div>
         );
       case 'super-admin':
-        // Fix: Pass onManageClinic to SuperAdminPanel as required by its interface
         return isSuperAdmin ? <SuperAdminPanel onManageClinic={handleManageClinic} /> : <Login onLoginSuccess={handleLogin} />;
       default:
         return null;

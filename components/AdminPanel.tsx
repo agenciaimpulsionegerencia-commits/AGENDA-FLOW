@@ -1,9 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
-import { apiService } from '../services/apiService';
-import { Appointment, Clinic, Service, BusinessHours, TimeSlot } from '../types';
+import { apiService } from '../services/apiService.ts';
+import { Appointment, Clinic, Service, BusinessHours, TimeSlot } from '../types.ts';
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-// Fix: Added missing Building import from lucide-react to resolve the error on line 153
 import { Plus, Trash2, Users, Calendar as CalendarIcon, DollarSign, Settings, Check, X, CreditCard, Wallet, Copy, Share2, ArrowLeft, Shield, Clock, Tag, ChevronLeft, ChevronRight, Briefcase, Building } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -19,7 +19,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ loggedClinic, isMasterVi
   const [loading, setLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
   
-  // Calendar State
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [daySlots, setDaySlots] = useState<TimeSlot[]>([]);
   const [showServiceForm, setShowServiceForm] = useState(false);
@@ -44,7 +43,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ loggedClinic, isMasterVi
   };
 
   const loadDayAvailability = async () => {
-    // We use the first service as a reference for availability logic
     const referenceServiceId = clinic.services[0]?.id || '';
     const slots = await apiService.getAvailability(clinic.id, referenceServiceId, selectedDate);
     setDaySlots(slots);

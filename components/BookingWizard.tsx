@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { apiService } from '../services/apiService';
-import { Clinic, Service, TimeSlot, Appointment } from '../types';
+import { apiService } from '../services/apiService.ts';
+import { Clinic, Service, TimeSlot, Appointment } from '../types.ts';
 import { format, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ChevronRight, Calendar as CalendarIcon, Clock, User as UserIcon, CheckCircle, Smartphone, AlertCircle, CreditCard, Wallet, Copy, Building, MapPin, Sparkles, ArrowRight } from 'lucide-react';
@@ -11,7 +11,7 @@ interface BookingWizardProps {
 }
 
 export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicId }) => {
-  const [step, setStep] = useState(0); // Step 0 is the Clinic Landing Page
+  const [step, setStep] = useState(0); 
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -32,14 +32,14 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
           const clinic = await apiService.getClinicById(preselectedClinicId);
           if (clinic) {
             setSelectedClinic(clinic);
-            setStep(0); // Start at landing page
+            setStep(0);
           } else {
             setError("Link inválido ou clínica desativada.");
           }
         } else {
           const allClinics = await apiService.getClinics();
           setClinics(allClinics);
-          setStep(1); // Start at clinic selection
+          setStep(1);
         }
       } finally {
         setLoading(false);
@@ -115,7 +115,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           </div>
-          
           <div className="p-10 text-center">
             <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
               Bem-vindo ao nosso sistema de agendamento privado. Reserve o seu horário com praticidade e exclusividade.
@@ -135,7 +134,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
-      {/* Progress Stepper */}
       <div className="flex items-center justify-between mb-8 overflow-x-auto pb-4 scrollbar-hide px-2">
         {[2, 3, 4, 5].map((num, idx) => {
           const labels = ['Serviço', 'Data', 'Pagamento', 'Confirmação'];
@@ -154,7 +152,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
           );
         })}
       </div>
-
       <div className="bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden min-h-[500px] animate-in slide-in-from-bottom-4 duration-500">
         {selectedClinic && step < 6 && step > 0 && (
            <div className="bg-gray-50/50 p-6 flex items-center border-b border-gray-100 backdrop-blur-sm">
@@ -171,7 +168,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
            </div>
         )}
-
         <div className="p-8 md:p-12">
           {step === 1 && (
             <div className="animate-in fade-in zoom-in-95">
@@ -199,7 +195,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           )}
-
           {step === 2 && selectedClinic && (
             <div className="animate-in fade-in zoom-in-95">
               <h2 className="text-3xl font-bold mb-8 font-serif text-gray-900">Selecione o Serviço</h2>
@@ -230,7 +225,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           )}
-
           {step === 3 && (
             <div className="animate-in fade-in zoom-in-95">
               <h2 className="text-3xl font-bold mb-8 font-serif text-gray-900">Escolha a Data</h2>
@@ -252,7 +246,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
                   );
                 })}
               </div>
-
               <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 px-1">Horários Disponíveis</h3>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                 {availableSlots.length === 0 ? (
@@ -272,7 +265,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
                   ))
                 )}
               </div>
-
               <div className="flex justify-between mt-12">
                 <button onClick={prevStep} className="text-sm text-gray-400 font-bold hover:text-gray-600 transition-colors">Voltar</button>
                 <button 
@@ -285,7 +277,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           )}
-
           {step === 4 && (
             <div className="animate-in fade-in zoom-in-95">
               <h2 className="text-3xl font-bold mb-8 font-serif text-gray-900">Pagamento</h2>
@@ -321,7 +312,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           )}
-
           {step === 5 && (
             <div className="animate-in fade-in zoom-in-95">
               <h2 className="text-3xl font-bold mb-8 font-serif text-gray-900">Seus Detalhes</h2>
@@ -350,7 +340,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
                    </div>
                 </div>
               </div>
-              
               <div className="mt-10 p-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl shadow-2xl text-white relative overflow-hidden">
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="flex justify-between items-start mb-6">
@@ -365,7 +354,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
                    </div>
                 </div>
               </div>
-
               <div className="flex justify-between mt-12">
                 <button onClick={prevStep} className="text-sm text-gray-400 font-bold hover:text-gray-600">Voltar</button>
                 <button 
@@ -378,7 +366,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
             </div>
           )}
-
           {step === 6 && bookingResult && (
             <div className="text-center py-10 animate-in zoom-in-95 duration-700">
               <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-10 shadow-inner">
@@ -386,7 +373,6 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
               </div>
               <h2 className="text-5xl font-bold mb-4 font-serif text-gray-900">Tudo Confirmado!</h2>
               <p className="text-lg text-gray-500 mb-10 max-w-sm mx-auto">Seu agendamento foi processado e já consta em nosso sistema.</p>
-              
               {paymentType === 'pix_prepaid' && (
                 <div className="mb-10 p-8 bg-gray-50 rounded-[2rem] border border-gray-200 shadow-sm">
                   <div className="flex items-center justify-center mb-6">
@@ -405,14 +391,12 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({ preselectedClinicI
                   <p className="text-xs text-gray-400 italic">"Para validar sua reserva prioritária, efetue o PIX e notifique no WhatsApp abaixo."</p>
                 </div>
               )}
-
               <button 
                 onClick={() => window.open(`https://wa.me/${selectedClinic?.phone}?text=${encodeURIComponent(`Olá! Gostaria de confirmar meu agendamento: \n\n👤 Nome: ${customerInfo.name}\n💆 Serviço: ${selectedService?.name}\n📅 Data: ${format(selectedDate, 'dd/MM')}\n⏰ Hora: ${selectedSlot}\n🔑 Código: ${bookingResult.confirmationCode}`)}`, '_blank')} 
                 className="w-full bg-[#25D366] text-white py-6 rounded-3xl font-black flex items-center justify-center shadow-2xl shadow-green-100 hover:scale-105 transition-all text-xl"
               >
                 <Smartphone className="w-7 h-7 mr-4" /> Enviar para WhatsApp
               </button>
-              
               <button onClick={() => window.location.reload()} className="mt-10 text-sm text-gray-400 hover:text-blue-600 font-black transition-colors uppercase tracking-widest">Fazer outro agendamento</button>
             </div>
           )}
