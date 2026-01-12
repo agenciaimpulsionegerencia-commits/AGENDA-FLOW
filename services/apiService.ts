@@ -1,5 +1,4 @@
-
-import { Clinic, Service, Appointment, TimeSlot, BusinessHours } from '../types';
+import { Clinic, Service, Appointment, TimeSlot, BusinessHours } from '../types.ts';
 import { format, addMinutes, parse, addDays, startOfDay, getDay } from 'date-fns';
 
 const STORAGE_KEYS = {
